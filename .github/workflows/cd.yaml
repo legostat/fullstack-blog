@@ -21,7 +21,7 @@ jobs:
           service_account: ${{ secrets.GOOGLECLOUD_SERVICE_ACCOUNT }}
           credentials_json: ${{ secrets.GOOGLECLOUD_CREDENTIALS }}
       - name: Build and push backend image
-        uses: docker/build-push-actions@v4
+        uses: docker/build-push-action@v4
         with:
           context: ./backend
           file: ./backend/Dockerfile
@@ -35,7 +35,7 @@ jobs:
           image: ${{ secrets.DOCKERHUB_USERNAME }}/blog-backend:latest
           region: ${{ secrets.GOOGLECLOUD_REGION }}
       - name: Build and push frontend image
-        uses: docker/build-push-actions@v4
+        uses: docker/build-push-action@v4
         with:
           context: .
           file: ./Dockerfile
