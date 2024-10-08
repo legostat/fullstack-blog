@@ -14,7 +14,7 @@ describe('creating user', () => {
 
     const createdUser = await createUser(userCredentials);
     expect(createdUser._id).toBeInstanceOf(mongoose.Types.ObjectId);
-    const user = User.findOne(createdUser._id);
+    const user = await User.findOne(createdUser._id);
     expect(
       bcrypt.compare(userCredentials.password, user.password),
     ).toBeTruthy();
