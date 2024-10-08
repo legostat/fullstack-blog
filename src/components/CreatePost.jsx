@@ -1,17 +1,19 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { createPost } from '../api/posts.js';
+import { useAuth } from '../contexts/AuthContext.jsx';
 
 export function CreatePost() {
+  const [token] = useAuth();
+
   const [postData, setPostData] = useState({
     title: '',
-    author: '',
     contents: '',
   });
 
   const queryClient = useQueryClient();
   const createPostMutation = useMutation({
-    mutationFn: () => createPost(postData),
+    mutationFn: () => createPost(token, postData),
     onSuccess: () => queryClient.invalidateQueries(['posts']),
   });
 
@@ -26,6 +28,20 @@ export function CreatePost() {
       [e.target.name]: e.target.value,
     }));
   };
+
+  if (!token) {
+    return (
+      <div className='container'>
+        <div className='row'>
+          <div className='col-12'>
+            <h3 className='h3 text-center mt-3'>
+              Please, log in to create a post
+            </h3>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className='container'>
@@ -45,19 +61,6 @@ export function CreatePost() {
               name='title'
               id='title'
               value={postData.title}
-              onChange={handleInput}
-            />
-          </div>
-          <div>
-            <label className='form-label' htmlFor='author'>
-              Author:
-            </label>
-            <input
-              className='form-control'
-              type='text'
-              name='author'
-              id='author'
-              value={postData.author}
               onChange={handleInput}
             />
           </div>
